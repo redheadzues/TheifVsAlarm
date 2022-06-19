@@ -7,12 +7,10 @@ using UnityEngine;
 
 public class Alarm : MonoBehaviour
 {
-    [SerializeField] private float _volumeStep;
-
     private Animator _animator;
     private AudioSource _audioAlarm;
+    private int _volumeSteps = 300;
     private bool _isAlarmWork = false;
-    private float _minVolumeValue = 0f;
     private float _maxVolumeValue = 1f;
     private const string AlarmOn = "AlarmOn";
     private const string AlarmOff = "AlarmOff";
@@ -31,25 +29,31 @@ public class Alarm : MonoBehaviour
             {
                 _isAlarmWork = true;
                 _animator.SetTrigger(AlarmOn);
-                
+                var das = StartCoroutine(ChangeAlarmVolume(_volumeSteps, true));              
             }
             else
             {
                 _isAlarmWork = false;
                 _animator.SetTrigger(AlarmOff);
+                StartCoroutine(ChangeAlarmVolume(_volumeSteps, false));
             }            
         }
     }
 
-    private void Update()
-    {
-        if(_isAlarmWork == true && _audioAlarm.volume < _maxVolumeValue)
+    private IEnumerator ChangeAlarmVolume(int volumeSteps, bool isIncrease)
+    {        
+        for(int i = 0; i < volumeSteps; i++)
         {
-            _audioAlarm.volume += _volumeStep;
-        }
-        else if(_isAlarmWork == false && _audioAlarm.volume > _minVolumeValue)
-        {
-            _audioAlarm.volume -= _volumeStep;
+            if(isIncrease == true)
+            {
+                _audioAlarm.volume += _maxVolumeValue / volumeSteps;
+            }
+            else
+            {
+                _audioAlarm.volume -= _maxVolumeValue / volumeSteps;
+            }
+                
+            yield return null;
         }
     }
 }
