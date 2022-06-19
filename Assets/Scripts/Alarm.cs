@@ -42,16 +42,9 @@ public class Alarm : MonoBehaviour
 
     private IEnumerator ChangeAlarmVolume(int targetVolume)
     {
-        bool isVolumeChanging = true;
-
-        while(isVolumeChanging)
+        while(_audioAlarm.volume != targetVolume)
         {
             _audioAlarm.volume = Mathf.MoveTowards(_audioAlarm.volume, targetVolume, Time.deltaTime);
-
-            if(_audioAlarm.volume == targetVolume)
-            {
-                isVolumeChanging = false;
-            }
 
             yield return null;
         }
