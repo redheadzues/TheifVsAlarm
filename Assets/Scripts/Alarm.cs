@@ -9,9 +9,7 @@ public class Alarm : MonoBehaviour
 {
     private Animator _animator;
     private AudioSource _audioAlarm;
-    private int _volumeSteps = 300;
     private bool _isAlarmWork = false;
-    private float _maxVolumeValue = 1f;
     private const string AlarmOn = "AlarmOn";
     private const string AlarmOff = "AlarmOff";
 
@@ -29,30 +27,30 @@ public class Alarm : MonoBehaviour
             {
                 _isAlarmWork = true;
                 _animator.SetTrigger(AlarmOn);
-                var das = StartCoroutine(ChangeAlarmVolume(_volumeSteps, true));              
+                var das = StartCoroutine(ChangeAlarmVolume(1));              
             }
             else
             {
                 _isAlarmWork = false;
                 _animator.SetTrigger(AlarmOff);
-                StartCoroutine(ChangeAlarmVolume(_volumeSteps, false));
+                StartCoroutine(ChangeAlarmVolume(0));
             }            
         }
     }
 
-    private IEnumerator ChangeAlarmVolume(int volumeSteps, bool isIncrease)
-    {        
-        for(int i = 0; i < volumeSteps; i++)
+    private IEnumerator ChangeAlarmVolume(float targetVolume)
+    {
+        bool isVolumeChanging = true;
+
+        while(isVolumeChanging)
         {
-            if(isIncrease == true)
+            _audioAlarm.volume = Mathf.MoveTowards(_audioAlarm.volume, targetVolume, Time.deltaTime);
+
+            if(_audioAlarm.volume == targetVolume)
             {
-                _audioAlarm.volume += _maxVolumeValue / volumeSteps;
+                isVolumeChanging = false;
             }
-            else
-            {
-                _audioAlarm.volume -= _maxVolumeValue / volumeSteps;
-            }
-                
+
             yield return null;
         }
     }
