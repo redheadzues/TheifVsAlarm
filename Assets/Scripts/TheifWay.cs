@@ -9,6 +9,7 @@ public class TheifWay : MonoBehaviour
 
     private Transform[] _points;
     private int _currentPoint;
+
     private void Start()
     {
         _points = new Transform[_theifWay.childCount];
