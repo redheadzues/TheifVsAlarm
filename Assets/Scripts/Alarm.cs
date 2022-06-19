@@ -10,6 +10,8 @@ public class Alarm : MonoBehaviour
     private Animator _animator;
     private AudioSource _audioAlarm;
     private bool _isAlarmWork = false;
+    private int _targetVolumeUp = 1;
+    private int _targetVolumeDown = 0;
     private const string AlarmOn = "AlarmOn";
     private const string AlarmOff = "AlarmOff";
 
@@ -27,18 +29,18 @@ public class Alarm : MonoBehaviour
             {
                 _isAlarmWork = true;
                 _animator.SetTrigger(AlarmOn);
-                var das = StartCoroutine(ChangeAlarmVolume(1));              
+                StartCoroutine(ChangeAlarmVolume(_targetVolumeUp));              
             }
             else
             {
                 _isAlarmWork = false;
                 _animator.SetTrigger(AlarmOff);
-                StartCoroutine(ChangeAlarmVolume(0));
+                StartCoroutine(ChangeAlarmVolume(_targetVolumeDown));
             }            
         }
     }
 
-    private IEnumerator ChangeAlarmVolume(float targetVolume)
+    private IEnumerator ChangeAlarmVolume(int targetVolume)
     {
         bool isVolumeChanging = true;
 
