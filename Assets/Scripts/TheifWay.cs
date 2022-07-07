@@ -23,6 +23,7 @@ public class TheifWay : MonoBehaviour
     private void Update()
     {
         Transform target = _points[_currentPoint];
+        Debug.Log(transform.position);
 
         transform.position =  Vector3.MoveTowards(transform.position, target.position, _speed * Time.deltaTime);
         
